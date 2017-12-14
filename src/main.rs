@@ -1,5 +1,23 @@
+use std::io::prelude::*;
+
+fn read_all<S: AsRef<std::path::Path>>(path: S) -> String {
+    let mut content = String::new();
+    let mut f = std::fs::File::open(path).unwrap();
+    f.read_to_string(&mut content).unwrap();
+    content
+}
+
 fn main() {
-    println!("Hello, world!");
+    let fname = std::env::args().nth(1).unwrap_or(String::from("example"));
+    let content = read_all(fname);
+
+    let sets: Sets = content.parse::<Configurations>().unwrap().into();
+
+    println!("Set[0].size = {}", sets.get(0).size);
+
+    let roots : std::collections::HashSet<_> = sets.map.keys().map(|&pid| sets.root(pid)).collect();
+
+    println!("Gropus = {}", roots.len());
 }
 
 pub type ProgramId = usize;
@@ -76,7 +94,7 @@ impl Sets {
         self.map[&self.root(id)].clone()
     }
 
-    fn root(&self, mut id: ProgramId) -> ProgramId {
+    pub fn root(&self, mut id: ProgramId) -> ProgramId {
         while id != self.map[&id].parent {
             id = self.map[&id].parent;
         }
