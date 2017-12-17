@@ -18,7 +18,7 @@ fn main() {
 
     println!("Set[0].size = {}", sets.get(0).size);
 
-    let roots : std::collections::HashSet<_> = sets.map.keys().map(|&pid| sets.root(pid)).collect();
+    let roots = sets.roots();
 
     println!("Gropus = {}", roots.len());
 }

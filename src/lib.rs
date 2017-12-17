@@ -79,6 +79,10 @@ impl Sets {
         id
     }
 
+    pub fn roots(&self) -> std::collections::HashSet<ProgramId> {
+        self.map.keys().map(|&pid| self.root(pid)).collect()
+    }
+
     fn join(&mut self, a: ProgramId, b: ProgramId) {
         let mut parent;
         let mut child;
